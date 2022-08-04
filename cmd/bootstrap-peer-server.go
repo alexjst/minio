@@ -78,12 +78,14 @@ func (s1 ServerSystemConfig) Diff(s2 ServerSystemConfig) error {
 			return fmt.Errorf("Expected drives pet set %d, seen %d", ep.DrivesPerSet,
 				s2.MinioEndpoints[i].DrivesPerSet)
 		}
+        /* AY: do not check endpoints for nomad
 		for j, endpoint := range ep.Endpoints {
 			if endpoint.String() != s2.MinioEndpoints[i].Endpoints[j].String() {
 				return fmt.Errorf("Expected endpoint %s, seen %s", endpoint,
 					s2.MinioEndpoints[i].Endpoints[j])
 			}
 		}
+        */
 	}
 	if !reflect.DeepEqual(s1.MinioEnv, s2.MinioEnv) {
 		var missing []string
