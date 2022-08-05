@@ -407,23 +407,27 @@ func errorResponseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	desc := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/minio/minio#upgrading-minio for your environment"
+	descPeer := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/minio/minio#upgrading-minio for your environment - PeerVersionMismatch"
+	descStorage := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/minio/minio#upgrading-minio for your environment - StorageVersionMismatch"
+	descLock := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/minio/minio#upgrading-minio for your environment - LockVersionMismatch"
+	descAdmin := "Do not upgrade one server at a time - please follow the recommended guidelines mentioned here https://github.com/minio/minio#upgrading-minio for your environment - LockVersionMismatch"
 	switch {
 	case strings.HasPrefix(r.URL.Path, peerRESTPrefix):
 		writeErrorResponseString(r.Context(), w, APIError{
 			Code:           "XMinioPeerVersionMismatch",
-			Description:    desc,
+			Description:    descPeer + ", r.URL.Path:" + r.URL.Path + ",prefix:" + peerRESTPrefix,
 			HTTPStatusCode: http.StatusUpgradeRequired,
 		}, r.URL)
 	case strings.HasPrefix(r.URL.Path, storageRESTPrefix):
 		writeErrorResponseString(r.Context(), w, APIError{
 			Code:           "XMinioStorageVersionMismatch",
-			Description:    desc,
+			Description:    descStorage + ", r.URL.Path:" + r.URL.Path + ",prefix:" + storageRESTPrefix,
 			HTTPStatusCode: http.StatusUpgradeRequired,
 		}, r.URL)
 	case strings.HasPrefix(r.URL.Path, lockRESTPrefix):
 		writeErrorResponseString(r.Context(), w, APIError{
 			Code:           "XMinioLockVersionMismatch",
-			Description:    desc,
+			Description:    descLock + ", r.URL.Path:" + r.URL.Path + ",prefix:" + lockRESTPrefix,
 			HTTPStatusCode: http.StatusUpgradeRequired,
 		}, r.URL)
 	case strings.HasPrefix(r.URL.Path, adminPathPrefix):
